@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../../index.css";
 import toast, { Toaster } from "react-hot-toast";
 import "../../index.css";
-import { useAuth } from "../hooks/useAuth"; // Import useAuth hook
-import { auth } from "../firebase";
+import { useAuth } from "../../utility/AuthUtil"; // Import useAuth hook
+import { auth } from "../../firebase";
 
 const handleButtons = () => {
   // Displaying a custom toast notification
@@ -75,7 +75,7 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     // Listen for authentication changes globally
     const unsubscribe = auth.onAuthStateChanged(() => {
       // Force re-render when user logs in/out
@@ -94,7 +94,6 @@ const Navbar = () => {
       console.error("Logout failed:", error);
     }
   };
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -123,6 +122,8 @@ const Navbar = () => {
     },
     exit: { opacity: 0, y: -10, transition: { duration: 0.2, ease: "easeIn" } },
   };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>
@@ -186,27 +187,16 @@ const Navbar = () => {
                         Home
                       </span>
                     </Link>
-                    <Link to="/team">
-                      <span className="block px-4 py-3 text-gray-600 hover:text-[#f0703a] hover:font-bold">
-                        Team
-                      </span>
-                    </Link>
+
                     <Link to="/faq">
                       <span className="block px-4 py-3 text-gray-600 hover:text-[#f0703a] hover:font-bold">
                         FAQs
-                      </span>
-                    </Link>
-
-                    <Link to="/contact-us">
-                      <span className="block px-4 py-3 text-gray-600 hover:text-[#f0703a] hover:font-bold">
-                        Contact Us
                       </span>
                     </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-
             {/* Services Dropdown */}
             <div
               className="relative"
@@ -295,7 +285,6 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
-
             {/* Resources Dropdown */}
             <div
               className="relative"
@@ -393,14 +382,12 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
-
             <Link
               to="/chatbot"
               className="text-gray-700 hover:text-[#f0703a] font-semibold lg:text-sm xl:text-base"
             >
               Chatbot
             </Link>
-
             {/* Login button */}
             <div className="flex items-center lg:space-x-3 xl:space-x-5 relative">
               {/* Login Button */}
@@ -420,7 +407,7 @@ const Navbar = () => {
                     className="flex items-center space-x-2 px-3 py-2 text-sm xl:text-base font-semibold text-[#f0703a] hover:text-[#fa804b] transition"
                   >
                     <FaUserCircle className="text-xl xl:text-2xl" />
-                    <span>Welcome, {user.name}!</span>
+                    <span>Welcome, {user?.name || "User"}!</span>
                   </button>
 
                   {isOpen && (
@@ -432,7 +419,7 @@ const Navbar = () => {
                       className="absolute right-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden"
                     >
                       <Link
-                        to="#"
+                        to="/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition text-medium"
                       >
                         Profile

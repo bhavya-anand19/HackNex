@@ -1,145 +1,118 @@
-import React from "react";
-import chatbot from "../../assets/chatbot.avif";
-function Chatbot() {
+import { useState } from "react";
+import Input from "./Input";
+import Button from "./Button";
+import Card from "./Card";
+import MessageBubble from "./MessageBubble";
+import { Send } from "lucide-react";
+import chatbotIcon from "../../assets/chatbot_icon.png";
+import "../../index.css";
+
+const API_KEY =
+  "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";
+
+export default function Chatbot() {
+  const [messages, setMessages] = useState([
+    { text: "Hello! How can I assist you?", sender: "bot" },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const newMessage = { text: input, sender: "user" };
+    setMessages([...messages, newMessage]);
+    setInput("");
+    setLoading(true);
+
+    // Show a "Thinking..." message
+    setMessages((prev) => [...prev, { text: "Thinking...", sender: "bot" }]);
+
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "You are a helpful AI assistant." },
+              ...messages.map((msg) => ({
+                role: msg.sender === "bot" ? "assistant" : "user",
+                content: msg.text,
+              })),
+              { role: "user", content: input },
+            ],
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const aiResponse =
+        data.choices[0]?.message?.content || "I couldn't understand that.";
+
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { text: aiResponse, sender: "bot" },
+      ]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { text: "Error processing request.", sender: "bot" },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
-      {/* Main Chatbot Section */}
-      <div className="bg-[#ffded7] py-28 lg:py-16">
-        <div className="mx-auto flex flex-col lg:flex-row items-center justify-center px-8 lg:px-20 lg:gap-16 xl:gap-20">
-          {/* Image Section */}
-          <div className="w-full lg:w-2/5 lg:ml-20 flex justify-center">
-            <img src={chatbot} alt="AI Chatbot" className="rounded-lg" />
-          </div>
-
-          {/* Text Section */}
-          <div className="lg:w-1/2 mt-8 md:mt-10 md:pl-12 mb-10 text-center lg:text-left lg:mr-20">
-            <h2 className="text-2xl md:text-4xl xl:text-5xl font-bold text-gray-800">
-              Meet Our AI Wellness Companion
-            </h2>
-            <h3 className="md:text-xl xl:text-2xl text-[#fe826c] font-semibold mb-6 mt-8">
-              Personalized Support and Guidance at Any Time, From Anywhere.
-            </h3>
-            <p className="text-base xl:text-lg text-gray-700 mt-4 mb-8">
-              Our AI chatbot is here to help, offering 24/7 access to
-              personalized guidance and resources. Whether you need a comforting
-              conversation or immediate assistance, the chatbot provides
-              reliable support right when you need it, all within a confidential
-              and secure environment.
-            </p>
-            <a
-              href="https://rezen-c.streamlit.app/"
-              className="inline-block bg-[#fe826c] text-white text-lg font-semibold py-3 px-16 rounded-lg shadow-md hover:bg-[#ea5b42] transition duration-300"
+    <div className="flex items-center justify-center min-h-screen p-4 bg-opacity-40 backdrop-blur-lg">
+      <Card className="w-full max-w-lg flex flex-col bg-gray-800 shadow-xl rounded-2xl border-[#f0703a] p-4">
+        <div className="bg-[#f0703a] text-white text-2xl font-bold mb-2 p-6 rounded-t-xl text-center">
+          Talk to our AI Assistant
+        </div>
+        <div className="flex-grow overflow-y-auto px-4 py-8 space-y-3 no-scrollbar">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex items-end ${
+                msg.sender === "bot" ? "justify-start" : "justify-end"
+              }`}
             >
-              Explore More
-            </a>
-          </div>
+              {msg.sender === "bot" && (
+                <img src={chatbotIcon} alt="Bot" className="w-12 h-12 mr-2" />
+              )}
+              <MessageBubble
+                text={msg.text}
+                sender={msg.sender}
+                className="bg-gray-700 text-white px-4 py-2 rounded-lg max-w-xs"
+              />
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* Why an AI Chatbot Section */}
-      <section className="bg-slate-200 text-center mx-4 sm:mx-8 lg:mx-36 my-16 py-14 px-6 sm:px-14 lg:px-28 rounded-lg lg:my-32 xl:my-36">
-        <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-8">
-          Why an AI Chatbot for Mental Health?
-        </h2>
-        <p className="text-lg font-semibold text-gray-700 mb-8">
-          In today’s fast-paced world, finding the right mental health support
-          can be challenging. Our AI chatbot is designed to provide immediate,
-          personalized help whenever you need it, bridging the gap between
-          traditional therapy and everyday wellness support.
-        </p>
-        <a
-          href="https://rezen-c.streamlit.app/"
-          className="inline-block bg-[#fe826c] text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-[#ea5b42] transition duration-300"
-        >
-          Try Our AI Chatbot
-        </a>
-      </section>
-
-      {/* Features Grid Section */}
-      <div className="bg-[#f8eeda] py-10">
-        <section className="mx-4 sm:mx-10 lg:mx-20 xl:mx-48 mt-5 lg:mt-10">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-600 text-center mb-16">
-            What Can Our AI Chatbot Do For You?
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">
-                24/7 Instant Support
-              </h3>
-              <p className="text-gray-200">
-                Our AI chatbot is available around the clock, ensuring you have
-                someone to talk to whenever you need.
-              </p>
-            </div>
-
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">
-                Personalized Conversations
-              </h3>
-              <p className="text-gray-200">
-                The chatbot adapts to your unique needs, offering tailored
-                advice based on your mental health history.
-              </p>
-            </div>
-
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">
-                Confidential & Secure
-              </h3>
-              <p className="text-gray-200">
-                Your privacy is our priority. All conversations are fully
-                encrypted and remain confidential.
-              </p>
-            </div>
-
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">
-                Self-Care Reminders
-              </h3>
-              <p className="text-gray-200">
-                Receive regular wellness tips and self-care reminders to help
-                maintain a balanced mental state.
-              </p>
-            </div>
-
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">Crisis Mode</h3>
-              <p className="text-gray-200">
-                In times of heightened distress, the chatbot can provide
-                immediate support or connect you with professional help.
-              </p>
-            </div>
-
-            {/* Feature Box */}
-            <div className="bg-[#016070] text-white p-10 h-64 flex flex-col justify-center items-center rounded-lg shadow-md text-center transition-transform transform hover:scale-105 hover:bg-[#024856]">
-              <h3 className="text-xl font-semibold mb-3">
-                Integration with Therapists
-              </h3>
-              <p className="text-gray-200">
-                The chatbot seamlessly connects you to licensed therapists for
-                further assistance when needed.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Button Section */}
-        <div className="mt-10 md:mt-14 lg:mt-20 text-center mx-auto mb-16">
-          <a
-            href="https://rezen-c.streamlit.app/"
-            className="inline-block bg-[#fe826c] text-white text-lg font-semibold py-4 px-20 rounded-lg shadow-md hover:bg-[#ea5b42] transition duration-300"
+        <div className="flex items-center px-3 py-5 border-t border-gray-600 bg-gray-700 bg-opacity-50 rounded-b-xl">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-grow bg-gray-800 text-white rounded-lg px-4 py-2 border-none focus:ring-2 focus:ring-[#f0703a]"
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            disabled={loading}
+          />
+          <Button
+            onClick={sendMessage}
+            className="ml-2 bg-[#f0703a] hover:bg-[#d65924] p-3 rounded-lg"
+            disabled={loading}
           >
-            Talk to Chatbot
-          </a>
+            {loading ? "..." : <Send size={20} />}
+          </Button>
         </div>
-      </div>
-    </>
+      </Card>
+    </div>
   );
 }
-
-export default Chatbot;
