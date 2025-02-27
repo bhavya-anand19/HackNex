@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-bg {
+  @apply bg-[#f0703a];
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap');
+
+@layer components {
+  .primary-btn {
+    @apply bg-[#f0703a] text-white font-semibold py-4 px-7 rounded-xl shadow-[0px_10px_14px_-7px_#fce6cf] hover:scale-110 duration-300;
+  }
+}
+
+@layer utilities {
+  .drop-shadow {
+    filter: drop-shadow(-6px 8px 15px rgba(0, 0, 0, 0.2));
+  }
+}
+
+#slider-boxes {
+  display: flex !important;
+}
+
+.slick-slide div {
+  margin: 16px;
+}
+
+.slick-list {
+  overflow: visible;
+  /* Ensure overflow visibility */
+}
+
+.slick-slide {
+  padding: 0 4px;
+  /* Adjust space between slides */
+}
+
+
+.slick-prev,
+.slick-next {
+  width: 35px;
+  height: 35px;
+  z-index: 1;
+  padding: 0 10px;
+}
+
+.slick-prev {
+  left: -50px;
+  /* Adjust the left button to create more space */
+}
+
+.slick-next {
+  right: -50px;
+  /* Adjust the right button to create more space */
+}
+
+/* Additional CSS for consistent margins */
+.slick-prev::before,
+.slick-next::before {
+  font-size: 35px;
+  color: #f0703a;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: transparent !important;
+}
+
+/* Add padding to make the boxes look good */
+.slider-container {
+  padding: 0 40px;
+  /* To create space between boxes and prev/next arrows */
+}
+
+.slick-prev,
+.slick-next {
+  width: 40px;
+  /* Button size */
+  height: 40px;
+  z-index: 1;
+  /* Ensure the buttons are above the slider */
+  background-color: #f0703a;
+  /* Color of the buttons */
+  border-radius: 50%;
+  /* Make buttons circular */
+  top: 50%;
+  /* Align vertically center */
+  transform: translateY(-50%);
+}
+
+.slick-prev {
+  left: -60px;
+  /* Distance from the boxes on the left */
+}
+
+.slick-next {
+  right: -60px;
+  /* Distance from the boxes on the right */
+}
+
+@media (max-width: 768px) {
+
+  .slick-prev,
+  .slick-next {
+    width: 30px;
+    /* Smaller buttons for mobile */
+    height: 30px;
+  }
+
+  .slick-prev {
+    left: -40px;
+    /* Adjust distance on mobile */
+  }
+
+  .slick-next {
+    right: -40px;
+  }
+}
