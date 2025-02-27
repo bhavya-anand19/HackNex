@@ -7,8 +7,7 @@ import { Send } from "lucide-react";
 import chatbotIcon from "../../assets/chatbot_icon.png";
 import "../../index.css";
 
-const API_KEY =
-  "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";
+const API_KEY = import.meta.env.REACT_APP_OPENAI_API_KEY;
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
