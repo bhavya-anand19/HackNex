@@ -9,9 +9,50 @@ import "../../index.css";
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
+// Keywords related to mental health
+const mentalHealthKeywords = [
+  "anxiety",
+  "depression",
+  "therapy",
+  "therapists",
+  "stress",
+  "mental health",
+  "self-care",
+  "PTSD",
+  "bipolar",
+  "OCD",
+  "ADHD",
+  "panic attack",
+  "mood disorder",
+  "trauma",
+  "psychologist",
+  "counseling",
+  "counselling",
+  "stress management",
+  "psychologists",
+  "meditation",
+  "mindfulness",
+  "women’s mental health",
+  "postpartum depression",
+  "eating disorder",
+  "insomnia",
+  "burnout",
+  "social anxiety",
+];
+
+// Function to check if a query is related to mental health
+const isMentalHealthRelated = (input) => {
+  return mentalHealthKeywords.some((keyword) =>
+    input.toLowerCase().includes(keyword)
+  );
+};
+
 export default function Chatbot() {
   const [messages, setMessages] = useState([
-    { text: "Hello! How can I assist you?", sender: "bot" },
+    {
+      text: "Hello! I specialize in mental health-related topics. How can I assist you?",
+      sender: "bot",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,6 +68,19 @@ export default function Chatbot() {
     // Show a "Thinking..." message
     setMessages((prev) => [...prev, { text: "Thinking...", sender: "bot" }]);
 
+    // Check if the query is relevant
+    if (!isMentalHealthRelated(input)) {
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          text: "I'm here to discuss mental health topics only. Please ask about anxiety, therapy, self-care, ADHD, or other related concerns.",
+          sender: "bot",
+        },
+      ]);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
@@ -39,7 +93,11 @@ export default function Chatbot() {
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
             messages: [
-              { role: "system", content: "You are a helpful AI assistant." },
+              {
+                role: "system",
+                content:
+                  "You are an AI assistant that specializes in mental health topics. Only answer questions related to mental health, such as anxiety, depression, therapy, self-care, PTSD, ADHD, OCD, stress, and related concerns. If the query is unrelated, respond by saying you only assist with mental health topics.",
+              },
               ...messages.map((msg) => ({
                 role: msg.sender === "bot" ? "assistant" : "user",
                 content: msg.text,

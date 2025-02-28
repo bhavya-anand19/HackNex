@@ -371,10 +371,11 @@ const Navbar = () => {
                     exit="exit"
                     className="absolute bg-white shadow-lg border mt-2 rounded-lg w-56 p-4 space-y-3 text-base transition-opacity duration-200 ease-in-out z-50"
                   >
-                    <span className="block px-4 py-3 text-gray-600 cursor-pointer hover:text-[#f0703a] hover:font-bold">
-                      Therapists
-                    </span>
-
+                    <Link to="/therapists-display">
+                      <span className="block px-4 py-3 text-gray-600 cursor-pointer hover:text-[#f0703a] hover:font-bold">
+                        Therapists
+                      </span>
+                    </Link>
                     <span className="block px-4 py-3 text-gray-600 cursor-pointer hover:text-[#f0703a] hover:font-bold">
                       Psychiatrists
                     </span>
@@ -419,10 +420,10 @@ const Navbar = () => {
                       className="absolute right-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden"
                     >
                       <Link
-                        to="/profile"
+                        to="/dashboard"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition text-medium"
                       >
-                        Profile
+                        Dashboard
                       </Link>
                       <button
                         onClick={handleLogout}

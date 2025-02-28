@@ -271,7 +271,7 @@ const OfferingsSection = () => {
         "Expert diagnosis and therapy services",
       ],
       buttonText: "Get Started",
-      buttonLink: "https://chat.whatsapp.com/FHud0xMwIdp10qcQIvGcDx",
+      buttonLink: "",
     },
     {
       id: 2,
@@ -283,7 +283,7 @@ const OfferingsSection = () => {
         "Mindfulness exercises, journaling prompts, and reflections",
       ],
       buttonText: "Download",
-      buttonLink: "/app-prod-release.apk",
+      buttonLink: "",
     },
     {
       id: 3,
@@ -295,7 +295,7 @@ const OfferingsSection = () => {
         "Build meaningful connections with others",
       ],
       buttonText: "Join the Community",
-      buttonLink: "https://chat.whatsapp.com/FHud0xMwIdp10qcQIvGcDx",
+      buttonLink: "",
     },
   ];
 
@@ -597,17 +597,17 @@ const Assistance = () => {
       <p className="text-center text-sm md:text-base">
         If you need any assistance, feel free to contact us at{" "}
         <a
-          href="mailto:contact@rezen.in"
+          href="mailto:anandbhavya92@gmail.com"
           className="text-[#fff7e9] font-semibold hover:underline"
         >
-          contact@rezen.in
+          anandbhavya92@gmail.com
         </a>{" "}
         or{" "}
         <a
-          href="tel:+918409412228"
+          href="tel:+919262781876"
           className="text-[#fff7e9] font-semibold hover:underline"
         >
-          +918409412228
+          +919262781876
         </a>
         . We’re here to support you every step of the way.
       </p>

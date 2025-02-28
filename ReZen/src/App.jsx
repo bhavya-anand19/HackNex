@@ -50,6 +50,11 @@ import { useLocation } from "react-router-dom";
 // import Resources from "./components/Resources/AllResources.jsx";
 import AllResources from "./components/Resources/AllResources.jsx";
 
+import { uploadTherapistsIfNeeded } from "./utility/firestoreUtils.js";
+import TherapistsDisplay from "./components/Therapists/therapistsDisplay.jsx";
+import SessionBooking from "./components/SessionBooking/SessionBooking.jsx";
+import Dashboard from "./components/Dashboard/Dashboard.jsx";
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -61,6 +66,9 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  useEffect(() => {
+    uploadTherapistsIfNeeded();
+  }, []);
   return (
     <Router>
       <Header />
@@ -111,6 +119,9 @@ function App() {
         <Route path="/attitude-test" element={<AttitudeTest />} />
         <Route path="/anorexia-test" element={<AnorexiaTest />} />
         <Route path="/ocd-test" element={<OcdTest />} />
+        <Route path="/therapists-display" element={<TherapistsDisplay />} />
+        <Route path="/book-session/:therapistId" element={<SessionBooking />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
     </Router>

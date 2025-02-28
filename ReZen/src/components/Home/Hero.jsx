@@ -49,9 +49,11 @@ function Hero() {
                     Free Pre Diagnosis
                   </button>
                 </Link>
-                <button className="w-full primaryBtn sm:w-auto px-6 py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-[#f0703a] to-[#f28850] hover:to-[#f07a46] transition-all duration-300 hover:scale-105">
-                  Find a Therapist
-                </button>
+                <Link to="/therapists-display" className="w-full sm:w-auto">
+                  <button className="w-full primaryBtn sm:w-auto px-6 py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-[#f0703a] to-[#f28850] hover:to-[#f07a46] transition-all duration-300 hover:scale-105">
+                    Find a Therapist
+                  </button>
+                </Link>
               </div>
             </motion.div>
           </div>
